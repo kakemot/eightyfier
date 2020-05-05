@@ -301,6 +301,7 @@
     <ClInclude Include="..\DSP_TapeDelay.h" />
     <ClInclude Include="..\DSP_TappedDelay.h" />
     <ClInclude Include="..\FilterButterworth24db.h" />
+    <ClInclude Include="..\verbengine.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="resources">
@@ -370,6 +371,9 @@
       <Filter>resources</Filter>
     </Image>
     <Image Include="..\resources\slider.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="..\resources\tinyknob.png">
       <Filter>resources</Filter>
     </Image>
   </ItemGroup>

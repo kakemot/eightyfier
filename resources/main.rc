@@ -234,6 +234,7 @@ BACKGROUND_FN PNG BACKGROUND_FN
 KNOB_FN PNG KNOB_FN
 SMALLKNOB_FN PNG SMALLKNOB_FN
 SLIDER_FN PNG SLIDER_FN
+TINYKNOB_FN PNG TINYKNOB_FN
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 

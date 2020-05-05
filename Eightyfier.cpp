@@ -13,6 +13,10 @@ Eightyfier::Eightyfier(const InstanceInfo& info)
   tapeDelay1 = new TapeDelay(44100);
   stereoDelay = new StereoDelay(44100);
   butter = new CFilterButterworth24db();
+  reverb = new WDL_ReverbAllpass();
+  reverb->setsize(2000);
+  reverb->setfeedback(0.1);
+  
 
   //Initial mixing levels (will be reset by preset loading anyway).
   dry1 = dry2 = 0.0f;
@@ -76,16 +80,18 @@ Eightyfier::Eightyfier(const InstanceInfo& info)
   GetParam(kHP2)->InitDouble("HP2", 38., 0., 100.0, 0.01, "%");
   GetParam(kPan2)->InitDouble("Pan2", 50., 0., 100.0, 0.01, "%");
   GetParam(kDelay2)->InitDouble("Delay2", 27., 0., 100.0, 0.01, "%");
-  GetParam(kFeedback2)->InitDouble("Feedback2", 50., 0., 100.0, 0.01, "%");
+  GetParam(kFeedback2)->InitDouble("Feedback2", 20., 0., 70.0, 0.01, "%");
   GetParam(kLevel2)->InitDouble("Level2", 47., 0., 100.0, 0.01, "%");
+  GetParam(reverbs)->InitDouble("Reverb", 0., 0., 100.0, 0.01, "%");
   //GetParam(moogFilt)->InitDouble("Moog", 0.0, 0.0, 100.0, 0.01, "%");
   GetParam(noise)->InitDouble("Noise", 0.0, 0.0, 100.0, 0.01, "%");
   mLayoutFunc = [&](IGraphics* pGraphics) {
     pGraphics->AttachCornerResizer(EUIResizerMode::Scale, false);
 
     pGraphics->AttachBackground(BACKGROUND_FN);
-    IBitmap knob = pGraphics->LoadBitmap(KNOB_FN, 101);
+    //IBitmap knob = pGraphics->LoadBitmap(KNOB_FN, 101);
     IBitmap smallknob = pGraphics->LoadBitmap(SMALLKNOB_FN, 127);
+    IBitmap tinyknob = pGraphics->LoadBitmap(TINYKNOB_FN, 101);
     IBitmap slider = pGraphics->LoadBitmap(SLIDER_FN, 31);
     IRECT b = pGraphics->GetBounds().GetAltered(150, 224, 23, 29);
     const int nRows = 5;
@@ -100,12 +106,13 @@ Eightyfier::Eightyfier(const InstanceInfo& info)
     pGraphics->AttachControl(new IBKnobControl(tapeX, tapeY, smallknob, k2mix));
     pGraphics->AttachControl(new IBKnobControl(fltrX, fltrY, smallknob, k2FltInt));
     pGraphics->AttachControl(new IBKnobControl(lfoX, lfoY, smallknob, k2LFOrate));
-    pGraphics->AttachControl(new IBKnobControl(feedbackX, feedbackY, smallknob, k2pong));
+    pGraphics->AttachControl(new IBKnobControl(feedbackX, feedbackY, smallknob, kFeedback2));
     pGraphics->AttachControl(new IBKnobControl(lowpassX, lowpassY, smallknob, lowpass));
     pGraphics->AttachControl(new IBKnobControl(lowcutX, lowcutY, smallknob, lowcut));
-    pGraphics->AttachControl(new IVSliderControl(nextCell().GetCentredInside(110.), noise, "-", DEFAULT_STYLE, true, EDirection::Horizontal), kCtrlTagVectorSlider, "vcontrols");
-   
-   
+    pGraphics->AttachControl(new IBKnobControl(noiseX, noiseY, tinyknob, noise));
+    pGraphics->AttachControl(new IBKnobControl(reverbX, reverbY, tinyknob, reverbs));
+    //pGraphics->AttachControl(new IVSliderControl(nextCell().GetCentredInside(110.), noise, "-", DEFAULT_STYLE, true, EDirection::Horizontal), kCtrlTagVectorSlider, "vcontrols");
+    
     /*
     MakePresetFromNamedParams((char*)"Bizzare Delay", 27,
       kunits, 24.29,
@@ -210,11 +217,7 @@ void Eightyfier::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   double* out1 = outputs[0];
   double* out2 = outputs[1];
 
-  double prev_in1 = 0;
-  double prev_in2 = 0;
-  double prev_out1 = 0;
-  double prev_out2 = 0;
-
+  float* tapenoise;
   double lp1;
   double lp2;
   double hp1;
@@ -236,6 +239,7 @@ void Eightyfier::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   const double lp = GetParam(lowpass)->Value();
   const double lc = GetParam(lowcut)->Value();
   const double noiselevel = GetParam(noise)->Value()/10000;
+  const double reverbmix = GetParam(reverbs)->Value() / 100;
   butter->SetSampleRate(GetSampleRate());
  
   /* Why are we doing this next part here? I couldn't find a function that informs the plug-in
@@ -280,7 +284,8 @@ void Eightyfier::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
     pink = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
     b6 = white * 0.115926;
 
-    outl = tapeDelay1->process((inl + inr) / 2);
+    outl = tapeDelay1->process(((inl + inr)/2) + pink * noiselevel);
+   
     (*out1) = (outl[0] * wet2 + inl * dry2);
     (*out2) = (outl[0] * wet2 + inr * dry2);
     butter->Set(lp, 0.1);
@@ -297,9 +302,8 @@ void Eightyfier::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
     *out1 = (*out1 * (1 - lc)) + hp1 * (lc);
     *out2 = (*out2 * (1 - lc)) + hp2 * (lc);
 
-    *out1 = *out1 * (1-noiselevel) + pink * noiselevel;
-    *out2 = *out2 * (1-noiselevel) + pink * noiselevel;
- 
+    *out1 = (*out1 * (1 - reverbmix)) + reverb->process(*out1) * (reverbmix);
+    *out2 = (*out2 * (1 - reverbmix)) + reverb->process(*out2) * (reverbmix);
   }
 
 }
@@ -559,7 +563,7 @@ void Eightyfier::OnParamChange(int paramIdx) {
                                                       {
 
                                                         topDelay_fb2 = GetParam(paramIdx)->Value() / 100.0;
-                                                        stereoDelay->setFeedback2(topDelay_fb2);
+                                                        tapeDelay1->setFeedback(topDelay_fb2);
                                                         sprintf(writeToDisplay, "%4.2f", topDelay_fb2);
                                                       }
                                                       else

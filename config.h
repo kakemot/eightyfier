@@ -58,3 +58,4 @@
 #define SMALLKNOB_FN "smallknob.png"
 #define SLIDER_FN "slider.png"
 #define BACKGROUND_FN "background.png"
+#define TINYKNOB_FN "tinyknob.png"

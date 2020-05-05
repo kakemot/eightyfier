@@ -5,6 +5,7 @@
 #include "DSP_StereoDelay.h"
 #include "FilterButterworth24db.h"
 #include "utilities.h"
+#include "verbengine.h"
 
 const int kNumPrograms = 1;
 
@@ -42,7 +43,8 @@ enum EParams
   moogFilt = 29,
   noise = 30,
   lowcut = 31,
-  kNumParams = 32
+  reverbs = 32,
+  kNumParams = 33
 };
 
 enum ECtrlTags
@@ -73,8 +75,10 @@ enum ELayout
   lowpassY = 40,
   lowcutX = 315,
   lowcutY = 130,
-  noiseX = 114,
+  noiseX = 91,
   noiseY = 215,
+  reverbX = 200,
+  reverbY = 216,
   kKnobFrames = 101,
   sKnobFrames = 127
 };
@@ -93,6 +97,7 @@ private:
   TapeDelay* tapeDelay1;
   StereoDelay* stereoDelay;
   CFilterButterworth24db* butter;
+  WDL_ReverbAllpass* reverb;
 
   //the plug-in parameter values
   float tempoUnit;

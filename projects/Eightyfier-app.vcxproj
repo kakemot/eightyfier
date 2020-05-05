@@ -331,6 +331,7 @@
     <ClInclude Include="..\FilterButterworth24db.h" />
     <ClInclude Include="..\Eightyfier.h" />
     <ClInclude Include="..\resources\resource.h" />
+    <ClInclude Include="..\verbengine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Dependencies\IPlug\RTAudio\include\asio.cpp" />
@@ -471,6 +472,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
+    <Image Include="..\resources\tinyknob.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\config\Eightyfier-ios.xcconfig" />
