@@ -6,6 +6,7 @@
 #include "FilterButterworth24db.h"
 #include "utilities.h"
 #include "verbengine.h"
+#include "besselfilter.h"
 
 const int kNumPrograms = 1;
 

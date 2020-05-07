@@ -100,6 +100,7 @@
     <ClCompile Include="..\DSP_TapeDelay.cpp" />
     <ClCompile Include="..\DSP_TappedDelay.cpp" />
     <ClCompile Include="..\FilterButterworth24db.cpp" />
+    <ClCompile Include="..\besselfilter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Eightyfier.h" />
@@ -302,6 +303,7 @@
     <ClInclude Include="..\DSP_TappedDelay.h" />
     <ClInclude Include="..\FilterButterworth24db.h" />
     <ClInclude Include="..\verbengine.h" />
+    <ClInclude Include="..\besselfilter.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="resources">

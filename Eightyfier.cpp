@@ -14,7 +14,7 @@ Eightyfier::Eightyfier(const InstanceInfo& info)
   stereoDelay = new StereoDelay(44100);
   butter = new CFilterButterworth24db();
   reverb = new WDL_ReverbAllpass();
-  reverb->setsize(2000);
+  reverb->setsize(2500);
   reverb->setfeedback(0.1);
   
 
@@ -57,7 +57,7 @@ Eightyfier::Eightyfier(const InstanceInfo& info)
   GetParam(k2hicut)->InitDouble("2hicut", 80.0, 0., 100.0, 0.01, "%");
   GetParam(k2lowcut)->InitDouble("2lowcut", 21., 0., 100.0, 0.01, "%");
   GetParam(k2msDelay1)->InitDouble("2msDelay1", 50., 0., 100.0, 0.01, "%");
-  GetParam(k2feedback)->InitDouble("2feedback", 50., 0., 100.0, 0.01, "%");
+  GetParam(k2feedback)->InitDouble("2feedback", 80., 0., 100.0, 0.01, "%");
   GetParam(k2pong)->InitDouble("2pong", 50., 0., 100.0, 0.01, "%");
   GetParam(k2note)->InitDouble("2note", 65., 0., 100.0, 0.01, "%");
   GetParam(k2fine)->InitDouble("2fine", 40., 0., 100.0, 0.01, "%");
@@ -66,7 +66,7 @@ Eightyfier::Eightyfier(const InstanceInfo& info)
   GetParam(k2FltInt)->InitDouble("2Flt Int", 20., 0., 100.0, 0.01, "%");
   GetParam(k2FltRate)->InitDouble("2Flt Rate", 40., 0., 100.0, 0.01, "%");
   GetParam(k2Smooth)->InitDouble("2Smooth", 20., 0., 100.0, 0.01, "%");
-  GetParam(k2mix)->InitDouble("2mix", 0., 0., 60, 0.01, "%");
+  GetParam(k2mix)->InitDouble("2mix", 50., 0., 100, 0.01, "%");
   GetParam(kswitch)->InitDouble("switch", 100., 0., 100.0, 0.01, "%");
   GetParam(kunits)->InitDouble("topDelay_tempoNote", 24., 0., 100.0, 0.01, "%");
   //GetParam(kwetdry1)->InitDouble("topDelay_wetDry", 50., 0., 100.0, 0.01, "%");
@@ -80,7 +80,7 @@ Eightyfier::Eightyfier(const InstanceInfo& info)
   GetParam(kHP2)->InitDouble("HP2", 38., 0., 100.0, 0.01, "%");
   GetParam(kPan2)->InitDouble("Pan2", 50., 0., 100.0, 0.01, "%");
   GetParam(kDelay2)->InitDouble("Delay2", 27., 0., 100.0, 0.01, "%");
-  GetParam(kFeedback2)->InitDouble("Feedback2", 20., 0., 70.0, 0.01, "%");
+  GetParam(kFeedback2)->InitDouble("Feedback2", 50., 0., 100.0, 0.01, "%");
   GetParam(kLevel2)->InitDouble("Level2", 47., 0., 100.0, 0.01, "%");
   GetParam(reverbs)->InitDouble("Reverb", 0., 0., 100.0, 0.01, "%");
   //GetParam(moogFilt)->InitDouble("Moog", 0.0, 0.0, 100.0, 0.01, "%");

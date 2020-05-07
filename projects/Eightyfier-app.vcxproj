@@ -321,6 +321,7 @@
     <ClInclude Include="..\..\..\IPlug\IPlugUtilities.h" />
     <ClInclude Include="..\..\..\IPlug\IPlug_include_in_plug_hdr.h" />
     <ClInclude Include="..\..\..\IPlug\IPlug_include_in_plug_src.h" />
+    <ClInclude Include="..\besselfilter.h" />
     <ClInclude Include="..\DSP_OnePoleHP.h" />
     <ClInclude Include="..\DSP_OnePoleLP.h" />
     <ClInclude Include="..\DSP_Sinosc.h" />
@@ -413,6 +414,7 @@
     <ClCompile Include="..\..\..\IPlug\IPlugPluginBase.cpp" />
     <ClCompile Include="..\..\..\IPlug\IPlugProcessor.cpp" />
     <ClCompile Include="..\..\..\IPlug\IPlugTimer.cpp" />
+    <ClCompile Include="..\besselfilter.cpp" />
     <ClCompile Include="..\DSP_OnePoleHP.cpp" />
     <ClCompile Include="..\DSP_OnepoleLP.cpp" />
     <ClCompile Include="..\DSP_Sinosc.cpp" />
